@@ -16,7 +16,17 @@ Route::get('/', function () {
 });
 
 Route::get('/posts/category/{categoryId}', 'PostController@index');
-Route::get('/category/create', 'PostController@create');
-Route::post('/category/create', 'PostController@store');
+Route::get('/post/show/{postId}', 'PostController@show');
+Route::get('/post/create', 'PostController@create');
+Route::post('/post/create', 'PostController@store');
+Route::get('/category/create', 'CategoryController@create');
+Route::post('/category/create', 'CategoryController@store');
+
+Route::get('/categories', 'CategoryController@index');
+
+Route::get('/category/edit/{id}', 'CategoryController@edit')->name('category_edit');
+Route::post('/category/edit/{id}', 'CategoryController@update')->name('update');
+
+Route::get('/category/delete/{id}', 'CategoryController@destroy')->name('category_delete');
 
 Auth::routes();

@@ -1,4 +1,4 @@
-<form action="" method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
     @csrf
     <label for="title">Title</label>
     <input name="title" id="title" type="text"/>

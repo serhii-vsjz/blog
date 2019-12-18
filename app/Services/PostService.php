@@ -22,13 +22,25 @@ class PostService implements PostServiceInterface
     public function getPostsByCategory(int $categoryId): ?Collection
     {
         /** @var Collection $posts */
-        $categoryPosts = Category::find($categoryId)->with('posts')->first();
+
+        dd($categoryId);
+        $categoryPosts = Category::find($categoryId);
+        dd($categoryPosts);
+        // $categoryPosts = Category::find($categoryId)->with('posts')->first();
         if (!$categoryPosts)
         {
             return null;
         }
         return $categoryPosts->posts;
     }
+
+    public function getCategoryById($categoryId): ?Category
+    {
+
+        $category = Category::find($categoryId);
+        return $category;
+    }
+
 
     public function getCategories(): ?Collection
     {
@@ -54,11 +66,20 @@ class PostService implements PostServiceInterface
      * @param array $attributes
      * @return int
      */
-    public function createCategory(array $attributes, Category $category): int
+    public function createCategory(array $attributes): int
     {
         $category = new Category();
         $category->name = $attributes['name'];
         $category->is_active = true;
+        $category->save();
+
+        return $category->id;
+    }
+
+    public function updateCategory(array $attributes, int $categoryId): int
+    {
+        $category = Category::find($categoryId);
+        $category->name = $attributes['name'];
         $category->save();
 
         return $category->id;
@@ -122,13 +143,14 @@ class PostService implements PostServiceInterface
         // TODO: Implement removePost() method.
     }
 
+
     /**
-     * Remove category
-     *
-     * @param Post $post
+     * @param int $categoryId
+     * @throws \Exception
      */
-    public function removeCategory(Post $post): void
+    public function removeCategory(int $categoryId): void
     {
-        // TODO: Implement removeCategory() method.
+        $category = $this->getCategoryById($categoryId);
+        $category->delete();
     }
 }

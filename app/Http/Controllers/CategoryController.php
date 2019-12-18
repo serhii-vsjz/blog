@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Services\PostServiceInterface;
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class CategoryController extends Controller
 {
-    private $postService;
+    private $postServices;
 
     public function __construct(PostServiceInterface $postService)
     {
-        $this->postService = $postService;
+        $this->postServices = $postService;
     }
 
     /**
@@ -19,10 +19,10 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($categoryId)
+    public function index()
     {
-        $posts = $this->postService->getPostsByCategory($categoryId);
-        dd($posts);
+        $categories = $this->postServices->getCategories();
+        return view('admin.category.list', compact('categories'));
     }
 
     /**
@@ -32,8 +32,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $categories = $this->postService->getCategories();
-        return view('admin.post.create', compact('categories'));
+        return view('admin.category.create');
     }
 
     /**
@@ -44,22 +43,8 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        /*
-        $this->validate($request, [
-            'title' =>' required|max:255',
-            'preview' => 'required',
-            'content' => 'required',
-            'category_id' => 'required|exists:categories,id', // validate exists categories
-            'poster' => 'mimes:gif, jpeg, bmp, png'
-        ]); */
-
-        $poster = $request->files->get('poster');
-        $postData = $request->all();
-
-        $postData['poster'] = $poster->getClientOriginalName();
-
-        $postId = $this->postService->createPost($postData);
-        return response(redirect('/post/show/' . $postId));
+        $category = $this->postServices->createCategory(['name' => $request->get('name')]);
+        return redirect('/categories');
     }
 
     /**
@@ -70,9 +55,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = $this->postService->getPostById($id);
-        $category = $this->postService->getCategoryById($post->category_id);
-        return view('admin.post.show', compact('post', 'category'));
+        //
     }
 
     /**
@@ -83,7 +66,9 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+
+        $category = $this->postServices->getCategoryById($id);
+        return view('admin.category.edit', compact('category'));
     }
 
     /**
@@ -95,7 +80,10 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $categoryId = $this->postServices->updateCategory(['name' => $request['name']], $id);
+
+        return response(redirect('categories'));
     }
 
     /**
@@ -106,6 +94,7 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->postServices->removeCategory($id);
+        return response(redirect('categories'));
     }
 }

@@ -30,13 +30,31 @@ interface PostServiceInterface
     public function getPostById(int $post): ?Post;
 
     /**
+     * Get category by ID
+     * @param $categoryId
+     * @return Category|null
+     */
+    public function getCategoryById($categoryId): ?Category;
+
+    /**
      * Create category
      *
      * @param array $attributes
      * @param Category $category
      * @return int
      */
-    public function createCategory(array  $attributes, Category $category): int;
+
+    /**
+     * Update category by ID
+     *
+     * @param array $attributes
+     * @param int $categoryId
+     * @return int
+     *
+     */
+    public function updateCategory(array $attributes, int $categoryId): int;
+
+    public function createCategory(array  $attributes): int;
 
     /**
      * Create post
@@ -68,9 +86,7 @@ interface PostServiceInterface
     public function removePost(Post $post): void;
 
     /**
-     * Remove category
-     *
-     * @param Post $post
+     * @param int $categoryId
      */
-    public function removeCategory(Post $post): void;
+    public function removeCategory(int $categoryId): void;
 }
