@@ -7,10 +7,17 @@ namespace App\Services;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 
 class PostService implements PostServiceInterface
 {
+    public function getPosts(int $perPage = 10): LengthAwarePaginator
+    {
+        $posts = Post::paginate($perPage);
+        return $posts;
+    }
+
 
     /**
      * Get posts by category

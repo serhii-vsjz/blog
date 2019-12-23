@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\PostServiceInterface;
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class  PostController extends Controller
 {
     private $postService;
 
@@ -19,10 +19,11 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($categoryId)
+    public function index()
     {
-        $posts = $this->postService->getPostsByCategory($categoryId);
-        dd($posts);
+        $posts = $this->postService->getPosts(10);
+
+        return view('post.index', compact('posts'));
     }
 
     /**
@@ -71,8 +72,7 @@ class PostController extends Controller
     public function show($id)
     {
         $post = $this->postService->getPostById($id);
-        $category = $this->postService->getCategoryById($post->category_id);
-        return view('admin.post.show', compact('post', 'category'));
+        return view('post.show', compact('post'));
     }
 
     /**
@@ -83,7 +83,8 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = $this->postService->getPostById($id);
+        return view('post.edit', compact('post'));
     }
 
     /**
@@ -106,6 +107,17 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = $this->postService->getPostById((int)$id);
+        if (!$post) {
+            abort(404);
+        }
+        if($post->is_published)
+        {
+            $post->is_published = false;
+        } else {
+            $post->is_published = true;
+        }
+        $post->save();
+        return back();
     }
 }

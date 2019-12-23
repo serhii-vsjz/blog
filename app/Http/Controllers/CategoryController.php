@@ -22,7 +22,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = $this->postServices->getCategories();
-        return view('admin.category.list', compact('categories'));
+        return view('category.index', compact('categories'));
     }
 
     /**
