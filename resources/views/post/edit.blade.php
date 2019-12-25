@@ -2,8 +2,10 @@
 
 @section('content')--}}
 
-<form method="post" enctype="multipart/form-data">
-    @csrf
+<form action="{{ route('update_post', ['postId' => $post->id]) }}" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_method" value="PATCH">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
     <label for="title">Title</label>
     <input name="title" id="title" type="text" value="{{ $post->title }}"/>
 
@@ -15,7 +17,7 @@
 
     <label for="category">Category</label>
     <select name="category" id="category">
-        @foreach()
+
     </select>
 
 

@@ -9,5 +9,5 @@
     <br>
     <p style="border: solid 1px red">{{ $post->content }}</p>
     <br>
-    <p style="border: solid 1px red">{{ $post->category->name }}</p>
+    <p style="border: solid 1px red"><a href="{{ route('show_category', ['categoryId' => $post->category->id]) }}">{{ $post->category->name }}</a></p>
 @endsection

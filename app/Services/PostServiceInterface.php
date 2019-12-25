@@ -20,7 +20,7 @@ interface PostServiceInterface
      * @return Collection
      *
      */
-    public function getPostsByCategory(int $categoryId): ?Collection;
+    public function getCategory(int $categoryId): ?Category;
 
     public function getCategories(): ?Collection;
 

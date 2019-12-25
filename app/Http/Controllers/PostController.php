@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Traits\DeletableTrait;
 use App\Services\PostServiceInterface;
 use Illuminate\Http\Request;
 
 class  PostController extends Controller
 {
+    use DeletableTrait;
     private $postService;
 
     public function __construct(PostServiceInterface $postService)
@@ -34,7 +36,7 @@ class  PostController extends Controller
     public function create()
     {
         $categories = $this->postService->getCategories();
-        return view('admin.post.create', compact('categories'));
+        return view('post.create', compact('categories'));
     }
 
     /**
@@ -60,7 +62,7 @@ class  PostController extends Controller
         $postData['poster'] = $poster->getClientOriginalName();
 
         $postId = $this->postService->createPost($postData);
-        return response(redirect('/post/show/' . $postId));
+        return response(redirect('/posts'));
     }
 
     /**
@@ -96,7 +98,8 @@ class  PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd($id);
+        dd($request);
     }
 
     /**
@@ -107,16 +110,8 @@ class  PostController extends Controller
      */
     public function destroy($id)
     {
-        $post = $this->postService->getPostById((int)$id);
-        if (!$post) {
-            abort(404);
-        }
-        if($post->is_published)
-        {
-            $post->is_published = false;
-        } else {
-            $post->is_published = true;
-        }
+        $post = $this->postService->getPostById($id);
+        $this->delete($post);
         $post->save();
         return back();
     }

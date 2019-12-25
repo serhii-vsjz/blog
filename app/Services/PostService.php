@@ -20,25 +20,18 @@ class PostService implements PostServiceInterface
 
 
     /**
-     * Get posts by category
      *
      * @param int $categoryId
      * @return Collection
      *
      */
-    public function getPostsByCategory(int $categoryId): ?Collection
+    public function getCategory(int $categoryId): ?Category
     {
-        /** @var Collection $posts */
-
-        dd($categoryId);
-        $categoryPosts = Category::find($categoryId);
-        dd($categoryPosts);
-        // $categoryPosts = Category::find($categoryId)->with('posts')->first();
-        if (!$categoryPosts)
-        {
+        $category = Category::find($categoryId);
+        if (!$category) {
             return null;
         }
-        return $categoryPosts->posts;
+        return $category;
     }
 
     public function getCategoryById($categoryId): ?Category
@@ -106,7 +99,7 @@ class PostService implements PostServiceInterface
         $post->title = $attributes['title'];
         $post->preview = $attributes['preview'];
         $post->content = $attributes['content'];
-        $post->is_published = false;
+        $post->is_active = false;
         $post->poster = $attributes['poster'];
 
         $category = Category::findOrFail($attributes['category_id']);

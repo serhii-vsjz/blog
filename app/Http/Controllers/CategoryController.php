@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Traits\DeletableTrait;
 use App\Services\PostServiceInterface;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    use DeletableTrait;
+
     private $postServices;
 
     public function __construct(PostServiceInterface $postService)
@@ -55,7 +58,11 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $category = $this->postServices->getCategory($id);
+        if (!$category) {
+            abort(404);
+        }
+        return view('category.show', compact('category'));
     }
 
     /**
@@ -94,7 +101,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $this->postServices->removeCategory($id);
-        return response(redirect('categories'));
+        $category = $this->postServices->getCategoryById($id);
+        $this->delete($category);
+        $category->save();
+        return back();
     }
 }
