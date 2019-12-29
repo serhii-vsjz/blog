@@ -6,91 +6,19 @@ namespace App\Services;
 
 use App\Models\Category;
 use App\Models\Post;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
+
 use Illuminate\Support\Facades\Auth;
 
 class PostService implements PostServiceInterface
 {
-    public function getPosts(int $perPage = 10): LengthAwarePaginator
+    public function getPosts(int $page, int $perPage = 2): LengthAwarePaginator
     {
         $posts = Post::paginate($perPage);
         return $posts;
     }
 
-
-    /**
-     *
-     * @param int $categoryId
-     * @return Collection
-     *
-     */
-    public function getCategory(int $categoryId): ?Category
-    {
-        $category = Category::find($categoryId);
-        if (!$category) {
-            return null;
-        }
-        return $category;
-    }
-
-    public function getCategoryById($categoryId): ?Category
-    {
-
-        $category = Category::find($categoryId);
-        return $category;
-    }
-
-
-    public function getCategories(): ?Collection
-    {
-        return Category::all();
-    }
-
-
-    /**
-     * Get post by ID
-     *
-     * @param int $post
-     * @return Post
-     */
-    public function getPostById(int $post): ?Post
-    {
-        return Post::find($post);
-    }
-
-
-    /**
-     * Category $category
-     *
-     * @param array $attributes
-     * @return int
-     */
-    public function createCategory(array $attributes): int
-    {
-        $category = new Category();
-        $category->name = $attributes['name'];
-        $category->is_active = true;
-        $category->save();
-
-        return $category->id;
-    }
-
-    public function updateCategory(array $attributes, int $categoryId): int
-    {
-        $category = Category::find($categoryId);
-        $category->name = $attributes['name'];
-        $category->save();
-
-        return $category->id;
-    }
-
-    /**
-     * Create post
-     *
-     * @param array $attributes
-     * @return int
-     */
     public function createPost(array $attributes): int
     {
         $user = Auth::user();
@@ -111,46 +39,69 @@ class PostService implements PostServiceInterface
         return $post->id;
     }
 
-    /**
-     * Publishing method
-     *
-     * @param Post $post
-     */
-    public function publish(Post $post): void
+    public function getPostById(int $post): ?Post
     {
-        $post->is_published = true;
+        return Post::find($post);
+    }
+
+    public function getPostsByCategory(Category $category, int $page, int $perPage = 2): LengthAwarePaginator
+    {
+        $posts = Post::where('category_id', $category->id)->paginate($perPage);
+        return $posts;
+    }
+
+    public function getFeaturedPosts(): ?Collection
+    {
+        $posts = Post::where('posts.is_active', true)
+            ->join('categories', 'categories.id', '=', 'posts.category_id')
+            ->limit(3)
+            ->get();
+        return $posts;
+    }
+
+    public function updatePost(array $attributes, int $postId): int
+    {
+        $post = Post::find($postId);
+        $post->title = $attributes['title'];
+        $post->preview = $attributes['preview'];
+        $post->content = $attributes['content'];
+        $post->category->id = $attributes['category'];
+
         $post->save();
+
+        return $post->id;
     }
 
-    /**
-     * Unpublish method
-     *
-     * @param Post $post
-     */
-    public function unPublish(Post $post): void
+    public function getCategories(): ?Collection
     {
-        $post->is_published = false;
-        $post->save();
+        return Category::all();
     }
 
-    /**
-     * Remove post
-     *
-     * @param Post $post
-     */
-    public function removePost(Post $post): void
+    public function createCategory(array $attributes): int
     {
-        // TODO: Implement removePost() method.
+        $category = new Category();
+        $category->name = $attributes['name'];
+        $category->is_active = true;
+        $category->save();
+
+        return $category->id;
     }
 
-
-    /**
-     * @param int $categoryId
-     * @throws \Exception
-     */
-    public function removeCategory(int $categoryId): void
+    public function getCategory(int $categoryId): ?Category
     {
-        $category = $this->getCategoryById($categoryId);
-        $category->delete();
+        $category = Category::find($categoryId);
+        if (!$category) {
+            return null;
+        }
+        return $category;
+    }
+
+    public function updateCategory(array $attributes, int $categoryId): int
+    {
+        $category = Category::find($categoryId);
+        $category->name = $attributes['name'];
+        $category->save();
+
+        return $category->id;
     }
 }

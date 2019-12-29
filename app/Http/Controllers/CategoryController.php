@@ -35,7 +35,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.category.create');
+        return view('category.create');
     }
 
     /**
@@ -46,8 +46,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = $this->postServices->createCategory(['name' => $request->get('name')]);
-        return redirect('/categories');
+        $attributes = $request->all();
+        $categoryId = $this->postServices->createCategory($attributes);
+        return redirect(route('show_category', ['categoryId' => $categoryId]));
     }
 
     /**
@@ -58,11 +59,15 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
+        $categories = $this->postServices->getCategories();
         $category = $this->postServices->getCategory($id);
         if (!$category) {
             abort(404);
         }
-        return view('category.show', compact('category'));
+
+        $allPosts = $this->postServices->getPostsByCategory($category, 10);
+
+        return view('category.show', compact('allPosts', 'category', 'categories'));
     }
 
     /**
@@ -101,7 +106,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = $this->postServices->getCategoryById($id);
+        $category = $this->postServices->getCategory($id);
         $this->delete($category);
         $category->save();
         return back();

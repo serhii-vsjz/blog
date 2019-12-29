@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\CommentService;
+use App\Services\CommentServiceInterface;
 use App\Services\PostService;
 use App\Services\PostServiceInterface;
 use Illuminate\Support\ServiceProvider;
@@ -18,6 +20,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             PostServiceInterface::class,
             PostService::class);
+        $this->app->bind(
+            CommentServiceInterface::class,
+            CommentService::class
+        );
     }
 
     /**

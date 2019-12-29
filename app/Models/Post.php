@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Post extends Model
 {
     protected $casts = [
-        'is_published' => 'bool'
+        'is_active' => 'bool'
     ];
 
     public function category(): BelongsTo
