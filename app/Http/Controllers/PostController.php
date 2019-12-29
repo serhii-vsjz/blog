@@ -47,22 +47,19 @@ class  PostController extends Controller
      */
     public function store(Request $request)
     {
-        /*
         $this->validate($request, [
-            'title' =>' required|max:255',
+            'title' => 'required|max:255',
             'preview' => 'required',
             'content' => 'required',
-            'category_id' => 'required|exists:categories,id', // validate exists categories
-            'poster' => 'mimes:gif, jpeg, bmp, png'
-        ]); */
-
-        $poster = $request->files->get('poster');
+            'category_id' => 'required|exists:categories,id',
+        ]);
         $postData = $request->all();
 
-        $postData['poster'] = $poster->getClientOriginalName();
-
+        $poster = $request->file('poster')->store('public');
+        $poster = str_replace('public', 'storage', $poster);
+        $postData['poster'] = $poster;
         $postId = $this->postService->createPost($postData);
-        return response(redirect('/posts'));
+        return response(redirect('/post/' .  $postId));
     }
 
     /**
@@ -73,8 +70,9 @@ class  PostController extends Controller
      */
     public function show($id)
     {
+        $categories = $this->postService->getCategories();
         $post = $this->postService->getPostById($id);
-        return view('post.show', compact('post'));
+        return view('post.show', compact('post', 'categories'));
     }
 
     /**
@@ -86,7 +84,8 @@ class  PostController extends Controller
     public function edit($id)
     {
         $post = $this->postService->getPostById($id);
-        return view('post.edit', compact('post'));
+        $categories = $this->postService->getCategories();
+        return view('post.edit', compact('post', 'categories'));
     }
 
     /**
@@ -98,8 +97,9 @@ class  PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($id);
-        dd($request);
+        $attributes = $request->toArray();
+        $postId = $this->postService->updatePost($attributes, $id);
+        return redirect(route('show_post', ['postId' => $postId]));
     }
 
     /**

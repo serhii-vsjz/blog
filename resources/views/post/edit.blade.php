@@ -3,6 +3,7 @@
 @section('content')--}}
 
 <form action="{{ route('update_post', ['postId' => $post->id]) }}" method="POST" enctype="multipart/form-data">
+    @method('PATCH')
     <input type="hidden" name="_method" value="PATCH">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
@@ -16,7 +17,12 @@
     <textarea name="content" id="content">{{ $post->content }}</textarea>
 
     <label for="category">Category</label>
-    <select name="category" id="category">
+    <select name="category" id="category" >
+        @foreach($categories as $category)
+            <option @if($category->id == $post->category->id) selected @endif value="{{ $category->id }}">
+                {{ $category->name }}
+            </option>
+        @endforeach
 
     </select>
 
