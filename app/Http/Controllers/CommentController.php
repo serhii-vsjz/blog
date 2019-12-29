@@ -21,6 +21,7 @@ class CommentController extends Controller
 
     public function create(int $postId, Request $request)
     {
+
         $this->validate($request, [
             'cMessage' => 'required',
         ]);
