@@ -66,7 +66,6 @@ class CategoryController extends Controller
         }
 
         $allPosts = $this->postServices->getPostsByCategory($category, 10);
-
         return view('category.show', compact('allPosts', 'category', 'categories'));
     }
 

@@ -19,7 +19,6 @@ class HomeController extends Controller
     public function index()
     {
         $posts = $this->postService->getFeaturedPosts();
-        $categories = $this->postService->getCategories();
 
         $allPosts = $this->postService->getPosts(1);
         $bigFeaturedPosts = null;
@@ -31,7 +30,6 @@ class HomeController extends Controller
                 $featuredPosts['normal'][] = $post;
             }
         }
-
-        return view('home.index', compact('allPosts', 'featuredPosts', 'bigFeaturedPosts', 'categories'));
+        return view('home.index', compact('allPosts', 'featuredPosts', 'bigFeaturedPosts'));
     }
 }
