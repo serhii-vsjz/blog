@@ -1,6 +1,15 @@
 <!-- s-content
 ================================================== -->
 <section class="s-content">
+    @if(!request()->routeIs('index'))
+        <div class="row narrow">
+            <div class="col-full s-content__header" data-aos="fade-up">
+                <h1>Category: {{ $category->name }}</h1>
+
+                <p class="lead">Dolor similique vitae. Exercitationem quidem occaecati iusto. Id non vitae enim quas error dolor maiores ut. Exercitationem earum ut repudiandae optio veritatis animi nulla qui dolores.</p>
+            </div>
+        </div>
+    @endif
 
     <div class="row masonry-wrap">
         <div class="masonry">
@@ -13,8 +22,7 @@
 
                 <div class="entry__thumb">
                     <a href="{{ route('show_post', ['postId' => $post->id]) }}" class="entry__thumb-link">
-                        <img src="{{ $post->poster }}">
-                           {{--  srcset="images/thumbs/masonry/lamp-400.jpg 1x, images/thumbs/masonry/lamp-800.jpg 2x" alt="">--}}
+                        <img src="{{ asset($post->poster) }}" alt="{{ $post->poster }}">
                     </a>
                 </div>
 
@@ -22,7 +30,9 @@
                     <div class="entry__header">
 
                         <div class="entry__date">
-                            <a href="single-standard.html">December 15, 2017</a>
+                            <a href="{{ route('show_post', ['postId' => $post->id]) }}">
+                                {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $post->created_at)->format('F, d Y') }}
+                            </a>
                         </div>
                         <h1 class="entry__title"><a href="{{ route('show_post', ['postId' => $post->id]) }}">{{ $post->title }}.</a></h1>
 
@@ -34,8 +44,7 @@
                     </div>
                     <div class="entry__meta">
                             <span class="entry__meta-links">
-                                <a href="category.html">Design</a>
-                                <a href="category.html">Photography</a>
+                                <a href="{{ route('show_category', ['categoryId' => $post->category->id]) }}">{{ $post->category->name }}</a>
                             </span>
                     </div>
                 </div>

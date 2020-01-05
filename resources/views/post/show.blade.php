@@ -1,7 +1,6 @@
 @extends('layouts.app')
-
 @section('content')
-    @include('layouts.header')
+
     <section class="s-content s-content--narrow s-content--no-padding-bottom">
 
         <article class="row format-standard">
@@ -104,4 +103,11 @@
             </div> <!-- end row comments -->
         </div> <!-- end comments-wrap -->
     </section>
+
+    @include('layouts.extra')
 @endsection
+
+
+
+
+

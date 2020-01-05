@@ -1,3 +1,5 @@
+<!-- s-footer
+================================================== -->
 <footer class="s-footer">
 
     <div class="s-footer__main">
@@ -8,11 +10,11 @@
                 <h4>Quick Links</h4>
 
                 <ul class="s-footer__linklist">
-                    <li><a href="#0">Home</a></li>
+                    <li><a href="{{ route('index') }}">Home</a></li>
                     <li><a href="#0">Blog</a></li>
                     <li><a href="#0">Styles</a></li>
-                    <li><a href="#0">About</a></li>
-                    <li><a href="#0">Contact</a></li>
+                    <li><a href="{{ route('about') }}">About</a></li>
+                    <li><a href="{{ route('contact') }}">Contact</a></li>
                     <li><a href="#0">Privacy Policy</a></li>
                 </ul>
 

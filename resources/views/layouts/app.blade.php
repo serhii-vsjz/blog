@@ -34,8 +34,10 @@
 <body id="top">
 
 @include('layouts.header')
-@include('home.content')
-@include('new.extra')
+
+@yield('content')
+
+@include('layouts.extra')
 @include('layouts.footer')
 @include('layouts.preloader')
 

@@ -32,4 +32,19 @@ class HomeController extends Controller
         }
         return view('home.index', compact('allPosts', 'featuredPosts', 'bigFeaturedPosts'));
     }
+
+    public function styles()
+    {
+        return view('home.styles');
+    }
+
+    public function about()
+    {
+        return view('home.about');
+    }
+
+    public function contact()
+    {
+        return view('home.contact');
+    }
 }

@@ -59,14 +59,13 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $categories = $this->postServices->getCategories();
         $category = $this->postServices->getCategory($id);
         if (!$category) {
             abort(404);
         }
 
         $allPosts = $this->postServices->getPostsByCategory($category, 10);
-        return view('category.show', compact('allPosts', 'category', 'categories'));
+        return view('category.show', compact('allPosts', 'category'));
     }
 
     /**

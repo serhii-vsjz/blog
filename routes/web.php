@@ -19,10 +19,14 @@ Route::get('/post/comment/{commentId}', 'CommentController@destroy')->name('dele
 Route::get('/welcome', function (){
     return view('welcome');
 })->name('home');
-Route::get('/about', function (){
-    return view('home.about');
-})->name('about');
 
+
+
+Route::get('/styles', 'HomeController@styles')->name('styles');
+Route::get('/about', 'HomeController@about')->name('about');
+Route::get('/contact', 'HomeController@contact')->name('contact');
+
+Route::post('/contact', 'MessageController@create')->name('create_message');
 
 Route::get('/', 'HomeController@index')->name('index');
 

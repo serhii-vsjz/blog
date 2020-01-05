@@ -47,9 +47,6 @@ class  PostController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
-
-        die();
         $this->validate($request, [
             'title' => 'required|max:255',
             'preview' => 'required',
@@ -73,9 +70,8 @@ class  PostController extends Controller
      */
     public function show($id)
     {
-        $categories = $this->postService->getCategories();
         $post = $this->postService->getPostById($id);
-        return view('post.show', compact('post', 'categories'));
+        return view('post.show', compact('post'));
     }
 
     /**

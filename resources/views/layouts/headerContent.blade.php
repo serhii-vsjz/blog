@@ -4,21 +4,26 @@
         <div class="featured">
 
             <div class="featured__column featured__column--big">
-                <div class="entry" style="background-image:url('images/thumbs/featured/featured-guitarman.jpg');">
+                <div class="entry" style="background-image:url('{{  $bigFeaturedPosts->poster }}');">
 
                     <div class="entry__content">
-                        <span class="entry__category"><a href="#0">Music</a></span>
+                        <span class="entry__category">
+                            <a href="{{ route('show_category', ['categoryId' => $bigFeaturedPosts->category->id]) }}">{{ $bigFeaturedPosts->category->name }}</a>
+                        </span>
 
-                        <h1><a href="#0" title="">What Your Music Preference Says About You and Your Personality.</a></h1>
+                        <h1>
+                            <a href="{{ route('show_post', ['postId' => $bigFeaturedPosts->id]) }}"
+                               title="">{{ $bigFeaturedPosts->title }}</a>
+                        </h1>
 
                         <div class="entry__info">
                             <a href="#0" class="entry__profile-pic">
-                                <img class="avatar" src="images/avatars/user-03.jpg" alt="">
+                                <img class="avatar" src="{{ asset('images/avatars/user-03.jpg') }}" alt="">
                             </a>
 
                             <ul class="entry__meta">
-                                <li><a href="#0">John Doe</a></li>
-                                <li>December 29, 2017</li>
+                                <li><a href="#0">{{ $bigFeaturedPosts->user->name }}</a></li>
+                                <li>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $bigFeaturedPosts->created_at)->format('F, d Y') }}</li>
                             </ul>
                         </div>
                     </div> <!-- end entry__content -->
@@ -27,48 +32,32 @@
             </div> <!-- end featured__big -->
 
             <div class="featured__column featured__column--small">
+                @foreach($featuredPosts['normal'] as $featuredPost)
+                    <div class="entry" style="background-image:url('{{ $featuredPost->poster }}');">
 
-                <div class="entry" style="background-image:url('images/thumbs/featured/featured-watch.jpg');">
+                        <div class="entry__content">
+                            <span class="entry__category">
+                                <a href="{{ route('show_category', ['categoryId' => $featuredPost->category->id]) }}">
+                                    {{ $featuredPost->category->name }}
+                                </a>
+                            </span>
 
-                    <div class="entry__content">
-                        <span class="entry__category"><a href="#0">Management</a></span>
+                            <h1><a href="{{ route('show_post', ['postId' => $featuredPost->id]) }}" title="">{{ $featuredPost->title }}.</a></h1>
 
-                        <h1><a href="#0" title="">The Pomodoro Technique Really Works.</a></h1>
+                            <div class="entry__info">
+                                <a href="{{ route('show_post', ['postId' => $featuredPost->id]) }}" class="entry__profile-pic">
+                                    <img class="avatar" src="{{ asset('images/avatars/user-03.jpg') }}" alt="">
+                                </a>
 
-                        <div class="entry__info">
-                            <a href="#0" class="entry__profile-pic">
-                                <img class="avatar" src="images/avatars/user-03.jpg" alt="">
-                            </a>
+                                <ul class="entry__meta">
+                                    <li><a href="#0">{{ $featuredPost->user->name }}</a></li>
+                                    <li>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$featuredPost->created_at)->format('F, d Y') }}</li>
+                                </ul>
+                            </div>
+                        </div> <!-- end entry__content -->
 
-                            <ul class="entry__meta">
-                                <li><a href="#0">John Doe</a></li>
-                                <li>December 27, 2017</li>
-                            </ul>
-                        </div>
-                    </div> <!-- end entry__content -->
-
-                </div> <!-- end entry -->
-
-                <div class="entry" style="background-image:url('images/thumbs/featured/featured-beetle.jpg');">
-
-                    <div class="entry__content">
-                        <span class="entry__category"><a href="#0">LifeStyle</a></span>
-
-                        <h1><a href="#0" title="">Throwback To The Good Old Days.</a></h1>
-
-                        <div class="entry__info">
-                            <a href="#0" class="entry__profile-pic">
-                                <img class="avatar" src="images/avatars/user-03.jpg" alt="">
-                            </a>
-
-                            <ul class="entry__meta">
-                                <li><a href="#0">John Doe</a></li>
-                                <li>December 21, 2017</li>
-                            </ul>
-                        </div>
-                    </div> <!-- end entry__content -->
-
-                </div> <!-- end entry -->
+                    </div> <!-- end entry -->
+                @endforeach
 
             </div> <!-- end featured__small -->
         </div> <!-- end featured -->
